@@ -1,3 +1,16 @@
-These are my notes on the project task page. This project is called "Build a Student Database: Part 1." The URL for the page which these notes are on is https://www.freecodecamp.org/learn/relational-database/learn-sql-by-building-a-student-database-part-1/build-a-student-database-part-1
+These are my notes on the project task page. This project is called "Build a Student Database: Part 2." The URL for the page which these notes are on is https://www.freecodecamp.org/learn/relational-database/learn-sql-by-building-a-student-database-part-2/build-a-student-database-part-2
 
-- EDIT THIS (AND ABOVE)
+- About this guided project: 
+	- We are building a student database
+	- This is a 140-lesson guided project 
+	- This is a continuation of the previous project -> the repository for our work from this was https://github.com/franpanteli/Relational-Databases-Build-a-Student-Database-Part-1-Project
+	- We are building the student database using SQL commands 
+		-> This project is more SQL-based
+
+- To run the guided project, you have to use the same process as before:
+	-> Clone the project boilerplate files
+	-> Open CodeRoad in the command palette using `CodeRoad: Start`
+	-> Then you follow the instructions to pass the guided project
+	-> You need to do it in one go -> or the progress you make could be lost in the tab you are working in 
+	-> This also requires a stable WiFi connection -> if it cuts out and has to start reconnecting then your progress will be lost 
+-> This is a continuation of the first guided project, but there is a separate set of Gitpod files for it 
