@@ -7,5 +7,6 @@ For this project, I had to produce a Bash script that used SQL to enter informat
 
 ## To Clone This Repository
 ```
-https://github.com/franpanteli/Relational-Databases-Build-a-Student-Database-Part-1-Project.git
+git clone https://github.com/franpanteli/Relational-Databases-Build-a-Student-Database-Part-2-Project.git
 ```
+
