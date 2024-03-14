@@ -1,0 +1,3 @@
+These are my notes on the project task page. This project is called "Build a Student Database: Part 1." The URL for the page which these notes are on is https://www.freecodecamp.org/learn/relational-database/learn-sql-by-building-a-student-database-part-1/build-a-student-database-part-1
+
+- EDIT THIS (AND ABOVE)
