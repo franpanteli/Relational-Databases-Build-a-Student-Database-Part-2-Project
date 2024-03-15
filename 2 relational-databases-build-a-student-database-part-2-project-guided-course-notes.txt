@@ -1,1 +1,312 @@
--> INSERT
+
+SETTING UP THE PROJECT IN THE TERMINAL:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+-> echo hello SQL <- To return hello SQL in the terminal 
+-> psql --username=freecodecamp --dbname=postgres <- To log into psql 
+-> \l <- To list the databases 
+	-> This is entered into the psql terminal 
+-> To split the terminal -> Top LHS > hamburger menu > terminal > split terminal 
+	-> Then in one terminal (the Bash terminal), enter psql -U postgres < students.sql to rebuild the database
+		-> We are reusing the database from the previous question 
+	-> \c students <- To connect to the students database 
+		-> This is done in the psql terminal  
+-> \d <- To display the tables which we have in the database (psql prompt)
+-> SELECT * FROM students; <- To print out all of the data in the students table (pqsl prompt)
+
+MAKING A PROJECT SHELL FILE IN THE TERMINAL:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+-> touch student_info.sh <- Making a shell file (Bash prompt)
+-> chmod +x student_info.sh <- To add executable file permissions to the .sh file we just created (Bash prompt)
+-> #!/bin/bash <- We add a shebang line into the top of the project .sh file, so that a Bash interpreter is used when it is run 
+-> We then add in a comment which explains the purpose of that file 
+	-> The syntax of comments in Bash scripts is the same as Python for single line comments (#)
+	-> echo -e "\n~~ My Computer Science Students ~~\n" <- This adds in a new line when the script is run, to print the program name 
+-> ./student_info.sh <- To run the project .sh file (Bash terminal)
+
+EDITING THE PROJECT SHELL FILE WITH VS CODE:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+-> PSQL="psql -X --username=freecodecamp --dbname=students --no-align --tuples-only -c" <- Adding this into the project .sh file allows us to log into psql by running the Bash script 
+-> echo -e "\nFirst name, last name, and GPA of students with a 4.0 GPA:"
+	-> We are then printing out a statement 
+
+EXTRACTING DATA FROM THE PROJECT DATABASE IN THE PSQL PROMPT:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+-> SELECT * FROM students; <- This returns all of the data in the students table for the project (psql prompt) 
+-> SELECT first_name, last_name, gpa FROM students; <- To return only the data in the table for the first names, last names and gpa's of the students 
+	-> We have imported the database created from the first half of the project (the repository for this is https://github.com/franpanteli/Relational-Databases-Build-a-Student-Database-Part-1-Project)
+	-> And now we are returning values from that database, in the psql prompt for the second half of the project
+-> SELECT first_name, last_name, gpa FROM students WHERE gpa < 2.5; <- This returns this data, for which the gpa of the students <2.5 
+	-> SELECT first_name, last_name, gpa FROM students WHERE gpa >= 3.8; <- This is similar to this statement, but except for gpa's which are above or equal to 3.8
+	-> So we have a group which are below average and another which are below 
+	-> SELECT first_name, last_name, gpa FROM students WHERE gpa != 4.0; <- Another similar statement, but for all of the students who did not have a 4.0 gpa 
+
+EDITING THE PROJECT SHELL FILE WITH VS CODE:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+-> The previous commands extracted information from the project database in the psql prompt
+-> We are now adding one of these statements into the project shell file 
+-> echo "$($PSQL "SELECT first_name, last_name, gpa FROM students WHERE gpa = 4.0")"
+-> This returns the students who scored a 4.0 gpa 
+-> ./student_info.sh  <- We then run the project .sh file in the Bash terminal to see if it works as expected 
+-> echo -e "\nAll course names whose first letter is before 'D' in the alphabet:" 
+	-> We are now adding another statement into the project .sh file 
+	-> This is to print out all of the course names whose first letter is before 'D' in the alphabet 
+
+EXTRACTING DATA FROM THE PROJECT DATABASE IN THE PSQL PROMPT:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+-> SELECT * FROM majors; <- This returns the names of the majors of the different students 
+-> SELECT * FROM majors WHERE major = 'Game Design'; <- This returns the ID of the major called Game Design 
+-> SELECT * FROM majors WHERE major != 'Game Design'; <- This does the same as the previous line, but in reverse 
+-> SELECT * FROM majors WHERE major > 'Game Design'; <- This returns all of the majors whose IDs are greater than the ID of `Game Design`
+-> SELECT * FROM majors WHERE major >= 'Game Design'; <- This does the same as the previous line, but includes the `Game Design` major 
+-> SELECT * FROM majors WHERE major < 'G'; <- This is a similar statement, but it returns the majors whose first letter begins with anything before G in the alphabet 
+
+EDITING THE PROJECT SHELL FILE WITH VS CODE:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+-> echo "$($PSQL "SELECT course FROM courses WHERE course < 'D'")"
+	-> We are adding in a similar statement to the one which we devised in the PSQL prompt
+	-> This selects all of the majors whose first letter begins with anything before D in the prompt (rather than G this time)
+	-> We add this in in the project .sh file 
+-> Then in the Bash terminal ./student_info.sh <- To test this 
+-> echo -e "\nFirst name, last name, and GPA of students whose last name begins with an 'R' or after and have a GPA greater than 3.8 or less than 2.0:" 
+	-> We are then adding another echo statement into the project .sh file, so that when it is run the users know what next set of information is being printed out 
+
+EXTRACTING DATA FROM THE PROJECT DATABASE IN THE PSQL PROMPT:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+-> SELECT * FROM students; <- Back in the psql prompt, this returns informations about the students in the database which we previously imported
+-> SELECT * FROM students WHERE last_name < 'M';
+	-> Selecting all of the students in the database whose surnames were before M in the alphabet 
+-> SELECT * FROM students WHERE last_name < 'M' OR gpa = 3.9;
+	-> This is the same as the previous set of results, but we are adding students whose gpas are 3.9
+-> SELECT * FROM students WHERE last_name < 'M' AND gpa = 3.9;
+	-> This is the same as the previous statement, but we are only returning the students who satisfy both conditions (rather than one or both)
+-> SELECT * FROM students WHERE last_name < 'M' AND gpa = 3.9 OR gpa < 2.3;
+	-> This is the same statement as the previous one, but we are also now including all of the students with a gpa < 2.3 
+-> SELECT * FROM students WHERE last_name < 'M' AND (gpa = 3.9 OR gpa < 2.3);
+	-> This is the same statement as the previous one, but with an extra set of brackets
+	-> Everything inside those brackets is the other (and) condition 
+	-> The statement on the end of that line would previously have been excluded from this AND condition -> it would have been an OR which was just added on top of the other statement 
+
+EDITING THE PROJECT SHELL FILE WITH VS CODE:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+-> Back in the project .sh file, we are adding in this line:
+	-> echo "$($PSQL "SELECT first_name, last_name, gpa FROM students WHERE last_name >= 'R' AND (gpa > 3.8 OR gpa < 2.0)")"
+	-> This adds in the SQL which we just wrote out in the psql prompt
+	-> Select the first and last names of the students, and their gpa's 
+	-> From this information, return the data which satisfy these conditions 
+	-> Conditions being, the surname of the student is after R in the alphabet, and their gpa falls between these two values 
+-> ./student_info.sh <- Then we are running the project .sh file, to see that these changes have worked 
+-> echo -e "\nLast name of students whose last name contains a case insensitive 'sa' or have an 'r' as the second to last letter:" 
+	-> We are then adding another echo line into the project .sh file, so that the user running the project application knows what information is being printed out next 
+		-> And then going back into the psql terminal to figure out the code to enter back into the project .sh file which would generate this 
+
+EXTRACTING DATA FROM THE PROJECT DATABASE IN THE PSQL PROMPT:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+-> SELECT * FROM courses; <- This prints out information about the different courses in the database (psql terminal / prompt)
+-> SELECT * FROM courses WHERE course LIKE '_lgorithms';
+	-> To return the information from the courses table, course column which contains the word `_lgorithms`
+	-> This is an example of pattern matching
+	-> _ <- This is the pattern which means a space is there  
+-> SELECT * FROM courses WHERE course LIKE '%lgorithms';
+	-> This is another example of pattern matching 
+	-> % <- This is the pattern which means anything can be there
+	-> The courses whose names end on `lgorithms`
+-> SELECT * FROM courses WHERE course LIKE 'Web%';
+	-> This is a similar example, except we are returning courses whose names begin in Web
+-> SELECT * FROM courses WHERE course LIKE '_e%';
+	-> This is the same as the previous example, except that we are returning the courses whose names have a character before an e 
+-> SELECT * FROM courses WHERE course LIKE '% %';
+	-> We are still in the psql prompt 
+	-> Take the course column in the courses table, and select the names of all of the courses which have spaces 
+	-> We don't care about what comes before or after the space, just that there is one 
+-> SELECT * FROM courses WHERE course NOT LIKE '% %';
+	-> This is the opposite of the previous statement 
+	-> Return the courses whose names do not have spaces 
+-> SELECT * FROM courses WHERE course LIKE '%A%';
+	-> Courses whose names contain As 
+-> SELECT * FROM courses WHERE course ILIKE '%A%';
+	-> This is the same as the previous statement, but case independent 
+-> SELECT * FROM courses WHERE course NOT ILIKE '%A%';
+	-> This is the same as with the previous line, it just selects for the opposite 
+-> SELECT * FROM courses WHERE course NOT ILIKE '%A%' AND course LIKE '% %';
+	-> SELECT * FROM courses WHERE course <- This selects the course column from the courses table 
+	-> NOT ILIKE '%A%' AND course LIKE '% %'; <- This combines the two previous statements 
+		-> The notes above explain these more specifically 
+
+EDITING THE PROJECT SHELL FILE WITH VS CODE:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+-> echo "$($PSQL "SELECT last_name FROM students WHERE last_name ILIKE '%sa%' OR last_name LIKE '%r_'")"
+	-> We add this line into the project .sh file 
+	-> This is another echo statement, which contains a selector from the psql prompt 
+	-> We are selecting the last names of the students, and just returning the ones which end in `sa`, or have an `r` followed by a character after them 
+-> ./student_info.sh <- Then running the script to see if these changes worked 
+-> echo -e "\nFirst name, last name, and GPA of students who have not selected a major and either their first name begins with 'D' or they have a GPA greater than 3.0:"
+	-> We then add another print (echo) statement into the project .sh file 
+	-> This tells the user more information which we are next to extract in the psql prompt 
+
+EXTRACTING DATA FROM THE PROJECT DATABASE IN THE PSQL PROMPT:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+-> SELECT * FROM students; <- This returns all of the information in the students table 
+-> SELECT * FROM students WHERE gpa IS NULL; 
+	-> This returns all of the students whose gpa isn't logged in the table 
+-> SELECT * FROM students WHERE gpa IS NOT NULL;
+	-> This is the same statement as the previous one in reverse 
+-> SELECT * FROM students WHERE major_id IS NULL;
+	-> This selects all of the students whose major_ids don't exist 
+-> SELECT * FROM students WHERE major_id IS NULL AND gpa IS NOT NULL;
+	-> This selects all of the students whose major_id is null and whose gpas aren't null
+-> SELECT * FROM students WHERE major_id IS NULL AND gpa IS NULL;
+	-> This selects the students where the major_id and gpas are null 
+
+EDITING THE PROJECT SHELL FILE WITH VS CODE:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+-> We now add in these sql commands into the project .sh file 
+-> 
+-> echo "$($PSQL "SELECT first_name, last_name, gpa FROM students WHERE major_id IS NULL AND (first_name LIKE 'D%' OR gpa > 3.0)")" <- 
+-> ./student_info.sh
+-> echo -e "\nCourse name of the first five courses, in reverse alphabetical order, that have an 'e' as the second letter or end with an 's':"
+
+EXTRACTING DATA FROM THE PROJECT DATABASE IN THE PSQL PROMPT:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+-> SELECT * FROM students ORDER BY gpa;
+-> SELECT * FROM students ORDER BY gpa DESC;
+-> SELECT * FROM students ORDER BY gpa DESC, first_name;
+-> SELECT * FROM students ORDER BY gpa DESC, first_name LIMIT 10;
+-> SELECT * FROM students WHERE gpa IS NOT NULL ORDER BY gpa DESC, first_name LIMIT 10;
+
+EDITING THE PROJECT SHELL FILE WITH VS CODE:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+-> echo "$($PSQL "SELECT course FROM courses WHERE course LIKE '_e%' OR course LIKE '%s' ORDER BY course DESC LIMIT 5")"
+-> ./student_info.sh
+-> echo -e "\nAverage GPA of all students rounded to two decimal places:"
+
+EXTRACTING DATA FROM THE PROJECT DATABASE IN THE PSQL PROMPT:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+-> SELECT MIN(gpa) FROM students;
+-> SELECT MAX(gpa) FROM students;
+-> SELECT SUM(major_id) FROM students;
+-> SELECT AVG(major_id) FROM students;
+-> SELECT CEIL(AVG(major_id)) FROM students;
+-> SELECT ROUND(AVG(major_id)) FROM students;
+-> SELECT ROUND(AVG(major_id), 5) FROM students;
+
+EDITING THE PROJECT SHELL FILE WITH VS CODE:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+-> echo "$($PSQL "SELECT ROUND(AVG(gpa), 2) FROM students")"
+-> ./student_info.sh
+-> echo -e "\nMajor ID, total number of students in a column named 'number_of_students', and average GPA rounded to two decimal places in a column name 'average_gpa', for each major ID in the students table having a student count greater than 1:"
+
+EXTRACTING DATA FROM THE PROJECT DATABASE IN THE PSQL PROMPT:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+-> SELECT COUNT(*) FROM majors;
+-> SELECT COUNT(*) FROM students;
+-> SELECT COUNT(major_id) FROM students;
+-> SELECT DISTINCT(major_id) FROM students;
+-> SELECT major_id FROM students GROUP BY major_id;
+-> SELECT major_id, COUNT(*) FROM students GROUP BY major_id;
+-> SELECT major_id, MIN(gpa) FROM students GROUP BY major_id;
+-> SELECT major_id, MIN(gpa), MAX(gpa) FROM students GROUP BY major_id;
+-> SELECT major_id, MIN(gpa), MAX(gpa) FROM students GROUP BY major_id HAVING MAX(gpa) = 4.0;
+-> SELECT major_id, MIN(gpa) AS min_gpa, MAX(gpa) FROM students GROUP BY major_id HAVING MAX(gpa) = 4.0;
+-> SELECT major_id, MIN(gpa) AS min_gpa, MAX(gpa) AS max_gpa FROM students GROUP BY major_id HAVING MAX(gpa) = 4.0;
+-> SELECT major_id, COUNT(*) AS number_of_students FROM students GROUP BY major_id;
+-> SELECT major_id, COUNT(*) AS number_of_students FROM students GROUP BY major_id HAVING COUNT(*) < 8;
+
+EDITING THE PROJECT SHELL FILE WITH VS CODE:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+-> echo "$($PSQL "SELECT major_id, COUNT(*) AS number_of_students, ROUND(AVG(gpa),2) AS average_gpa FROM students GROUP BY major_id HAVING COUNT(*) > 1")"
+-> ./student_info.sh
+-> echo -e "\nList of majors, in alphabetical order, that either no student is taking or has a student whose first name contains a case insensitive 'ma':"
+
+EXTRACTING DATA FROM THE PROJECT DATABASE IN THE PSQL PROMPT:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+-> SELECT * FROM students FULL JOIN majors ON students.major_id = majors.major_id;
+-> SELECT * FROM students LEFT JOIN majors ON students.major_id = majors.major_id;
+-> SELECT * FROM students RIGHT JOIN majors ON students.major_id = majors.major_id;
+-> SELECT * FROM students INNER JOIN majors ON students.major_id = majors.major_id;
+-> SELECT * FROM majors LEFT JOIN students ON majors.major_id = students.major_id; 
+-> SELECT * FROM majors INNER JOIN students ON majors.major_id = students.major_id;
+-> SELECT * FROM majors RIGHT JOIN students ON majors.major_id = students.major_id;
+-> SELECT * FROM majors FULL JOIN students ON majors.major_id = students.major_id;
+-> SELECT * FROM students INNER JOIN majors ON students.major_id = majors.major_id;
+-> SELECT major FROM students INNER JOIN majors ON students.major_id = majors.major_id;
+-> SELECT DISTINCT(major) FROM students INNER JOIN majors ON students.major_id = majors.major_id;
+-> SELECT * FROM students RIGHT JOIN majors ON students.major_id = majors.major_id;
+-> SELECT * FROM students RIGHT JOIN majors ON students.major_id = majors.major_id WHERE student_id IS NULL;
+-> SELECT major FROM students RIGHT JOIN majors ON students.major_id = majors.major_id WHERE student_id IS NULL; 
+-> SELECT * FROM students LEFT JOIN majors ON students.major_id = majors.major_id;
+-> SELECT * FROM students LEFT JOIN majors ON students.major_id = majors.major_id WHERE major='Data Science' OR gpa >= 3.8;
+-> SELECT first_name, last_name, major, gpa FROM students LEFT JOIN majors ON students.major_id = majors.major_id WHERE major='Data Science' OR gpa >= 3.8;
+-> SELECT * FROM students FULL JOIN majors ON students.major_id = majors.major_id;
+-> SELECT * FROM students FULL JOIN majors ON students.major_id = majors.major_id WHERE first_name LIKE '%ri%' OR major LIKE '%ri%';
+-> SELECT first_name, major FROM students FULL JOIN majors ON students.major_id = majors.major_id WHERE first_name LIKE '%ri%' OR major LIKE '%ri%';
+
+
+EDITING THE PROJECT SHELL FILE WITH VS CODE:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+-> echo "$($PSQL "SELECT major FROM students FULL JOIN majors ON students.major_id = majors.major_id WHERE major IS NOT NULL AND (student_id IS NULL OR first_name ILIKE '%ma%') ORDER BY major")"
+-> ./student_info.sh
+-> echo -e "\nList of unique courses, in reverse alphabetical order, that no student or 'Obie Hilpert' is taking:"
+
+EXTRACTING DATA FROM THE PROJECT DATABASE IN THE PSQL PROMPT:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+-> SELECT * FROM students FULL JOIN majors ON students.major_id = majors.major_id;
+-> SELECT students.major_id FROM students FULL JOIN majors ON students.major_id = majors.major_id;
+-> SELECT students.major_id FROM students FULL JOIN majors AS m ON students.major_id = m.major_id;
+-> SELECT s.major_id FROM students AS s FULL JOIN majors AS m ON s.major_id = m.major_id;
+-> SELECT * FROM students FULL JOIN majors USING(major_id);
+-> SELECT * FROM students FULL JOIN majors USING(major_id) FULL JOIN majors_courses USING(major_id);
+-> SELECT * FROM students FULL JOIN majors USING(major_id) FULL JOIN majors_courses USING(major_id) FULL JOIN courses USING(course_id);
+
+EDITING THE PROJECT SHELL FILE WITH VS CODE:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+-> echo "$($PSQL "SELECT DISTINCT(course) FROM students RIGHT JOIN majors USING(major_id) INNER JOIN majors_courses USING(major_id) INNER JOIN courses USING(course_id) WHERE (first_name = 'Obie' AND last_name = 'Hilpert') OR student_id IS NULL ORDER BY course DESC")"
+-> ./student_info.sh
+-> echo -e "\nList of courses, in alphabetical order, with only one student enrolled:"
+-> echo "$($PSQL "SELECT course FROM students INNER JOIN majors_courses USING(major_id) INNER JOIN courses USING(course_id) GROUP BY course HAVING COUNT(student_id) = 1 ORDER BY course")"
+-> ./student_info.sh
