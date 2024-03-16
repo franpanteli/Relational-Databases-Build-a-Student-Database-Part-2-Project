@@ -186,56 +186,70 @@ EDITING THE PROJECT SHELL FILE WITH VS CODE:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 -> We now add in these sql commands into the project .sh file 
--> 
--> echo "$($PSQL "SELECT first_name, last_name, gpa FROM students WHERE major_id IS NULL AND (first_name LIKE 'D%' OR gpa > 3.0)")" <- 
--> ./student_info.sh
--> echo -e "\nCourse name of the first five courses, in reverse alphabetical order, that have an 'e' as the second letter or end with an 's':"
+-> echo "$($PSQL "SELECT first_name, last_name, gpa FROM students WHERE major_id IS NULL AND (first_name LIKE 'D%' OR gpa > 3.0)")" 
+	-> We are extracting the names and gpa's of students 
+	-> From this we are selecting students for which the major_id is null and the first name of the subject which they take starts with a D, or they have a gpa > 3
+-> ./student_info.sh <- We then run the project file to see if these changes worked 
+-> echo -e "\nCourse name of the first five courses, in reverse alphabetical order, that have an 'e' as the second letter or end with an 's':" <- This prints out a statement for the next set of data which we want to return 
 
 EXTRACTING DATA FROM THE PROJECT DATABASE IN THE PSQL PROMPT:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 -> SELECT * FROM students ORDER BY gpa;
+	-> Select all of the students and order them by their gpa's
 -> SELECT * FROM students ORDER BY gpa DESC;
+	-> Put this into descending order 
 -> SELECT * FROM students ORDER BY gpa DESC, first_name;
+	-> Do this by the first name of the student 
 -> SELECT * FROM students ORDER BY gpa DESC, first_name LIMIT 10;
+	-> Only publish the top 10 student according to gpa and name ordering 
 -> SELECT * FROM students WHERE gpa IS NOT NULL ORDER BY gpa DESC, first_name LIMIT 10;
+	-> Take all the students, and only look at the rows which don't have null gpas
+	-> Then order the rows according to gpa
+	-> Then only return the top 10 results 
 
 EDITING THE PROJECT SHELL FILE WITH VS CODE:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 -> echo "$($PSQL "SELECT course FROM courses WHERE course LIKE '_e%' OR course LIKE '%s' ORDER BY course DESC LIMIT 5")"
--> ./student_info.sh
--> echo -e "\nAverage GPA of all students rounded to two decimal places:"
+	-> We are adding an echo statement to the project .sh file 
+	-> This contains a statement similar to the previous ones 
+	-> We are selecting all of the columns from the students table 
+	-> Then only taking the rows which don't contain null gpas
+	-> Ordering them 
+	-> Then only returning a maximum of 10 results 
+-> ./student_info.sh <- Then testing the script to see if this worked (Bash terminal)
+-> echo -e "\nAverage GPA of all students rounded to two decimal places:" <- Then printing out the statement which we next want to return the data for 
 
 EXTRACTING DATA FROM THE PROJECT DATABASE IN THE PSQL PROMPT:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
--> SELECT MIN(gpa) FROM students;
--> SELECT MAX(gpa) FROM students;
--> SELECT SUM(major_id) FROM students;
--> SELECT AVG(major_id) FROM students;
--> SELECT CEIL(AVG(major_id)) FROM students;
--> SELECT ROUND(AVG(major_id)) FROM students;
--> SELECT ROUND(AVG(major_id), 5) FROM students;
+-> SELECT MIN(gpa) FROM students; <- Back in the psql prompt, we are returning the minimum value which the gpa attribute takes in the students table  
+-> SELECT MAX(gpa) FROM students; <- This is the same as the previous statement, but the maximum not minimum 
+-> SELECT SUM(major_id) FROM students; <- This calculates the sum of `major_id` across all of the students rows in the table 
+-> SELECT AVG(major_id) FROM students; <- This does the same as the previous line, but calculates the average instead of the sum 
+-> SELECT CEIL(AVG(major_id)) FROM students; <- This does the same as the previous line, but rounds upwards
+-> SELECT ROUND(AVG(major_id)) FROM students; <- This does the same as the previous line, but either rounds up or downwards
+-> SELECT ROUND(AVG(major_id), 5) FROM students; <- This does the same as the previous line, but rounds to 5 decimal places
 
 EDITING THE PROJECT SHELL FILE WITH VS CODE:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
--> echo "$($PSQL "SELECT ROUND(AVG(gpa), 2) FROM students")"
--> ./student_info.sh
--> echo -e "\nMajor ID, total number of students in a column named 'number_of_students', and average GPA rounded to two decimal places in a column name 'average_gpa', for each major ID in the students table having a student count greater than 1:"
+-> echo "$($PSQL "SELECT ROUND(AVG(gpa), 2) FROM students")" <- We add an echo statement into the project .sh file -> we are rounding the average gpa of the students to 2 decimal places 
+-> ./student_info.sh <- In the Bash terminal, we test to see if the code we just added into the project .sh file worked
+-> echo -e "\nMajor ID, total number of students in a column named 'number_of_students', and average GPA rounded to two decimal places in a column name 'average_gpa', for each major ID in the students table having a student count greater than 1:" <- Then printing out the statement which we next want to return the data for 
 
 EXTRACTING DATA FROM THE PROJECT DATABASE IN THE PSQL PROMPT:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
--> SELECT COUNT(*) FROM majors;
--> SELECT COUNT(*) FROM students;
--> SELECT COUNT(major_id) FROM students;
+-> SELECT COUNT(*) FROM majors; <- This counts the total number of rows in the `majors` table 
+-> SELECT COUNT(*) FROM students; <- This does the same, but for the `students` table  
+-> SELECT COUNT(major_id) FROM students; 
 -> SELECT DISTINCT(major_id) FROM students;
 -> SELECT major_id FROM students GROUP BY major_id;
 -> SELECT major_id, COUNT(*) FROM students GROUP BY major_id;
@@ -246,14 +260,28 @@ EXTRACTING DATA FROM THE PROJECT DATABASE IN THE PSQL PROMPT:
 -> SELECT major_id, MIN(gpa) AS min_gpa, MAX(gpa) AS max_gpa FROM students GROUP BY major_id HAVING MAX(gpa) = 4.0;
 -> SELECT major_id, COUNT(*) AS number_of_students FROM students GROUP BY major_id;
 -> SELECT major_id, COUNT(*) AS number_of_students FROM students GROUP BY major_id HAVING COUNT(*) < 8;
+	-> We are finding the number of students enrolled in each major where the count of students < 8 
+	-> We select the major_id column 
+	-> We are counting the number of records in each group 
+	-> AS number_of_students <- Alias
+	-> FROM students <- From the `students` table
+	-> GROUP BY major_id <- We are then grouping the result by the major_id column 	
+		-> This means that the count of student will be calculated for each unique major_id
+	-> COUNT(*) < 8 <- Only include students with a count of < 8 in the set 
+	-> This returns us the subjects who have less than 8 students enrolled 
+		-> Select the major_id, count all fo the columns and group them by the number of subjects with < 8 students 
+	-> The main thing here is that `count` returns the number of rows in a table 
 
 EDITING THE PROJECT SHELL FILE WITH VS CODE:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
--> echo "$($PSQL "SELECT major_id, COUNT(*) AS number_of_students, ROUND(AVG(gpa),2) AS average_gpa FROM students GROUP BY major_id HAVING COUNT(*) > 1")"
--> ./student_info.sh
--> echo -e "\nList of majors, in alphabetical order, that either no student is taking or has a student whose first name contains a case insensitive 'ma':"
+-> echo "$($PSQL "SELECT major_id, COUNT(*) AS number_of_students, ROUND(AVG(gpa),2) AS average_gpa FROM students GROUP BY major_id HAVING COUNT(*) > 1")" <- We add an echo statement into the project .sh file with the new statement 
+	-> This is similar to the statements we just created in the psql prompt 
+	-> We are counting the number of students per subject and rounding the average gpa of the students in those subjects to two decimal places 
+	-> And then we are returning the majors (subjects) with more than one student 
+-> ./student_info.sh <- In the Bash terminal, we test to see if the code we just added into the project .sh file worked
+-> echo -e "\nList of majors, in alphabetical order, that either no student is taking or has a student whose first name contains a case insensitive 'ma':" <- Then printing out the statement which we next want to return the data for 
 
 EXTRACTING DATA FROM THE PROJECT DATABASE IN THE PSQL PROMPT:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -279,15 +307,35 @@ EXTRACTING DATA FROM THE PROJECT DATABASE IN THE PSQL PROMPT:
 -> SELECT * FROM students FULL JOIN majors ON students.major_id = majors.major_id;
 -> SELECT * FROM students FULL JOIN majors ON students.major_id = majors.major_id WHERE first_name LIKE '%ri%' OR major LIKE '%ri%';
 -> SELECT first_name, major FROM students FULL JOIN majors ON students.major_id = majors.major_id WHERE first_name LIKE '%ri%' OR major LIKE '%ri%';
-
+	-> SELECT first_name, major <- Select the `first_name` and `major` columns 
+		-> We have selected the first names of the students, and the subjects they do 
+	-> FROM students FULL JOIN majors ON students.major_id = majors.major_id: 
+		-> We are performing a full outer join between two tables 
+			-> We have one table full of students and another full of the subjects they took 
+			-> We are joining them together based on the major_id column  
+			-> We have two tables, and both of them share this column 
+			-> We are taking those two separate tables and joining them together via this 
+	-> WHERE first_name LIKE '%ri%' OR major LIKE '%ri%'
+		-> The previous set of statements took two tables and combined (joined) them into one using a column which they both had in common 
+		-> This statement is taking the results which this returns and filtering them 
+		-> % <- This is a wildcard matching any sequence of characters
+		-> We are using pattern matching 
+		-> The are matching for the substring 'ri' either in the first_name column in the students table or in the major column in the majors table 
 
 EDITING THE PROJECT SHELL FILE WITH VS CODE:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
--> echo "$($PSQL "SELECT major FROM students FULL JOIN majors ON students.major_id = majors.major_id WHERE major IS NOT NULL AND (student_id IS NULL OR first_name ILIKE '%ma%') ORDER BY major")"
--> ./student_info.sh
--> echo -e "\nList of unique courses, in reverse alphabetical order, that no student or 'Obie Hilpert' is taking:"
+-> echo "$($PSQL "SELECT major FROM students FULL JOIN majors ON students.major_id = majors.major_id WHERE major IS NOT NULL AND (student_id IS NULL OR first_name ILIKE '%ma%') ORDER BY major")"  <- We add an echo statement into the project .sh file with the new statement 
+	-> This is the same SQL query as the one which we previously created in the psql prompt, but with some changes 
+	-> We are still performing an outer join 
+	-> Then we are selecting certain results from that outer join 
+	-> The results we are selecting are different -> this time there are two conditions 
+	-> WHERE major IS NOT NULL AND (student_id IS NULL OR first_name ILIKE '%ma%'):
+		-> This is the statement which is filtering this information 
+		-> We are filtering out null values, or that the first name of hte student contains `ma` (regardless of case)
+-> ./student_info.sh <- In the Bash terminal, we test to see if the code we just added into the project .sh file worked
+-> echo -e "\nList of unique courses, in reverse alphabetical order, that no student or 'Obie Hilpert' is taking:" <- Then printing out the statement which we next want to return the data for 
 
 EXTRACTING DATA FROM THE PROJECT DATABASE IN THE PSQL PROMPT:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -300,13 +348,26 @@ EXTRACTING DATA FROM THE PROJECT DATABASE IN THE PSQL PROMPT:
 -> SELECT * FROM students FULL JOIN majors USING(major_id);
 -> SELECT * FROM students FULL JOIN majors USING(major_id) FULL JOIN majors_courses USING(major_id);
 -> SELECT * FROM students FULL JOIN majors USING(major_id) FULL JOIN majors_courses USING(major_id) FULL JOIN courses USING(course_id);
+	-> We are performing multiple outer joins in this SQL line
+	-> This is similar to the one we previously created in the project psql prompt
+	-> Taking two tables, column(s) they have in common and then merging (joining) them using this 
+	-> We are selecting all of the columns from the output of the joins
+	-> Then we are performing multiple outer joins between different tables, in the same line of SQL
+		-> FULL JOIN majors USING(major_id) <- This joins the `students` and `majors` tables based on the `major_id` column 
+		-> FULL JOIN majors_courses USING(major_id) 
+			-> This takes the table that the previous join outputted and performs another join on it 
+			-> The table it's being joined with is `majors_courses` and we are doing this based on the `course_id` column 
+	-> Both of the tables we are joining have a column with the same name, this is what we perform the join based on 
+	-> All rows are being included in the join (results with NULL values are still included)
+	-> We have in effect combined (joined) the columns from four different tables (`students`, `majors`, `majors_courses`, and `courses`) 
 
 EDITING THE PROJECT SHELL FILE WITH VS CODE:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
--> echo "$($PSQL "SELECT DISTINCT(course) FROM students RIGHT JOIN majors USING(major_id) INNER JOIN majors_courses USING(major_id) INNER JOIN courses USING(course_id) WHERE (first_name = 'Obie' AND last_name = 'Hilpert') OR student_id IS NULL ORDER BY course DESC")"
--> ./student_info.sh
+-> echo "$($PSQL "SELECT DISTINCT(course) FROM students RIGHT JOIN majors USING(major_id) INNER JOIN majors_courses USING(major_id) INNER JOIN courses USING(course_id) WHERE (first_name = 'Obie' AND last_name = 'Hilpert') OR student_id IS NULL ORDER BY course DESC")" 
+	-> We are now adding in the SQL commands which we previously derived in the project psql prompt into its .sh file 
+-> ./student_info.sh <- In the Bash terminal, we test to see if the code we just added into the project .sh file worked
 -> echo -e "\nList of courses, in alphabetical order, with only one student enrolled:"
 -> echo "$($PSQL "SELECT course FROM students INNER JOIN majors_courses USING(major_id) INNER JOIN courses USING(course_id) GROUP BY course HAVING COUNT(student_id) = 1 ORDER BY course")"
--> ./student_info.sh
+-> ./student_info.sh <- In the Bash terminal, we test to see if the code we just added into the project .sh file worked
