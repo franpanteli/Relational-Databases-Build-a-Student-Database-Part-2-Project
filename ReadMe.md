@@ -11,7 +11,8 @@ For this project, I had to produce a Bash script that used complex SQL statement
 
 - I then split the VSCode terminal with dual PSQL and Bash prompts. The prior prompt was used to write SQL that extracted the correct set of information from the [students.sql database](https://github.com/franpanteli/Relational-Databases-Build-a-Student-Database-Part-2-Project/blob/main/students.sql) or altered it in the desired way
 
-- Once the desired SQL statement was obtained in the PSQL prompt, it was then added to the project Bash program, [`student_info.sh`](https://github.com/franpanteli/Relational-Databases-Build-a-Student-Database-Part-2-Project/blob/main/student_info.sh). This was tested in the latter Bash terminal, using `./student_info.sh`
+- Once the desired SQL statement was obtained in the PSQL prompt, it was then added to the project Bash program, [`student_info.sh`](https://github.com/franpanteli/Relational-Databases-Build-a-Student-Database-Part-2-Project/blob/main/student_info.sh)
+- The SQL statements added into the project shell script were then tested in a Bash terminal. This was executed by running the shell script in this teminal, by using `./student_info.sh`
 
 - This process was repeated for each of the SQL statements in [the project .sh file](https://github.com/franpanteli/Relational-Databases-Build-a-Student-Database-Part-2-Project/blob/main/student_info.sh). I created in-depth SQL notes for each of these iterations [which are here](https://github.com/franpanteli/Relational-Databases-Build-a-Student-Database-Part-2-Project/blob/main/2%20relational-databases-build-a-student-database-part-2-project-guided-course-notes.txt)
 
